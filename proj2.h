@@ -68,9 +68,9 @@ typedef union
 #define DUMMYNode       204
 #define EXPRNode        205
 #define INTEGERTNode	206
-#define CHARTNode	207
+#define CHARTNode		207
 #define BOOLEANTNode	208
-#define STNode		209
+#define STNode			209
 
 tree NullExp();
 tree MakeLeaf(int, int);
