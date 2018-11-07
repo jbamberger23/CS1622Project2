@@ -10,6 +10,8 @@ This file consists of 4 parts
 
 The functions in this file are contributed by Chunmin Qiao and
 Aggelos Varvitsiotis.
+
+baw76 initial commit
 */
 
 /*	define syntax tree node and pointer type	*/
