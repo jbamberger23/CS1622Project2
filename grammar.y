@@ -13,6 +13,9 @@
 %%
 Program : PROGRAMnum IDnum SEMInum ClassDecl
 	{ $$ = MakeTree(ProgramOp, $4, MakeLeaf(IDNode, $2)); printtree($$, 0); }
+	;
+ClassDecl : CLASSnum IDnum ClassBody
+	{ $$ = }
 %%
 int yycolumn, yyline;
 FILE *treelst;
