@@ -12,10 +12,10 @@
 %type <tptr> Program ClassDecl ClassBody Decls FieldDecl VariableDeclId VariableInitializer ArrayInitializer ArrayCreateExp MethodDecl FormalParamList Block Type StatementList Statement AssignmentStatement MethodCallStatement Return If While Expression SimpleExpression Term Factor UnsignedConstant Variable
 %%
 Program : PROGRAMnum IDnum SEMInum ClassDecl
-	{}
+	{ $$ = MakeTree(ProgramOp, $4, MakeLeaf(IDNode, $2)); printtree($$, 0); }
 %%
 int yycolumn, yyline;
 FILE *treelst;
-main() { treelst = stdout; yyparse();}
-yyerror(char *str) {printf("yyerror: %s at line %d\n", str, yyline);}
+main() { treelst = stdout; yyparse(); }
+yyerror(char *str) { printf("yyerror: %s at line %d\n", str, yyline); }
 #include "lex.yy.c"
