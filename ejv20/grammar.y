@@ -12,7 +12,11 @@
 %token <intg>  LTnum LEnum EQnum NEnum GEnum GTnum PLUSnum MINUSnum ORnum TIMESnum DIVIDEnum ANDnum
 %token <intg>  NOTnum ICONSTnum SCONSTnum
 
-%type  <tptr>  Program ClassDecl_rec ClassDecl 
+%type  <tptr>  Program ClassDecl_rec ClassDecl ClassBody Decls_rec Decls FieldDecl_rec FieldDecl VariableDeclId
+%type  <tptr>  VariableInitializer ArrayInitializer ArrayCreationExpression MethodDecl_rec MethodDecl
+%type  <tptr>  FormalParameterList Block Type StatementList Statement AssignmentStatement MethodCallStatement
+%type  <tptr>  ReturnStatement IfStatement WhileStatement Expression SimpleExpression Term Factor
+%type  <tptr>  UnsignedConstant Variable
 
 
 %%/* yacc specification*/
@@ -27,7 +31,170 @@ ClassDecl_rec    :      ClassDecl                        /* 1 or More of ClassDe
                  |      ClassDecl_rec ClassDecl
 			  {  $$ = MakeTree(ClassOp, $1, $2); }
                  ;
-ClassDecl        :      CLASSnum IDnum /*ClassBody */ /* you need to define ClassBody and more rules*/
+ClassDecl        :      CLASSnum IDnum ClassBody /* you need to define ClassBody and more rules*/
+                          { /* $$ = MakeTree(ClassDefOp, $3, MakeLeaf(IDNode, $2));*/ 
+			     $$=  MakeLeaf(IDNode, $2);	
+                          }
+                 ;
+				 
+ClassBody        :      LBRACEnum Decls_rec MethodDecl_rec RBRACEnum
+                          { /* $$ = MakeTree(ClassDefOp, $3, MakeLeaf(IDNode, $2));*/ 
+			     $$=  MakeLeaf(IDNode, $2);	
+                          }
+                 ;
+				 
+				 
+Decls_rec       :      Decls 
+                          {  $$ = MakeTree(DeclOp, NullExp(), $1); } 
+                 |      Decls_rec Decls
+			  {  $$ = MakeTree(DeclOp, $1, $2); }
+                 ;
+				 
+				 
+Decls            :      DECLARATIONSnum FieldDecl_rec ENDDECLARATIONSnum 
+                          { /* $$ = MakeTree(ClassDefOp, $3, MakeLeaf(IDNode, $2));*/ 
+			     $$=  MakeLeaf(IDNode, $2);	
+                          }
+                 ;
+				 
+
+FieldDecl_rec    :      DECLARATIONSnum FieldDecl ENDDECLARATIONSnum 
+                          { /* $$ = MakeTree(ClassDefOp, $3, MakeLeaf(IDNode, $2));*/ 
+			     $$=  MakeLeaf(IDNode, $2);	
+                          }
+                 ;
+				 
+FieldDecl        :      DECLARATIONSnum FieldDecl ENDDECLARATIONSnum 
+                          { /* $$ = MakeTree(ClassDefOp, $3, MakeLeaf(IDNode, $2));*/ 
+			     $$=  MakeLeaf(IDNode, $2);	
+                          }
+                 ;
+				 
+				 
+VariableDeclId   :      LBRACEnum 
+                          { /* $$ = MakeTree(ClassDefOp, $3, MakeLeaf(IDNode, $2));*/ 
+			     $$=  MakeLeaf(IDNode, $2);	
+                          }
+                 ;	
+				 
+ArrayInitializer :      LBRACEnum 
+                          { /* $$ = MakeTree(ClassDefOp, $3, MakeLeaf(IDNode, $2));*/ 
+			     $$=  MakeLeaf(IDNode, $2);	
+                          }
+                 ;
+				 
+ArrayCreationExpression :       
+                          { /* $$ = MakeTree(ClassDefOp, $3, MakeLeaf(IDNode, $2));*/ 
+			     $$=  MakeLeaf(IDNode, $2);	
+                          }
+                 ;
+				 
+MethodDecl_rec	 :       
+                          { /* $$ = MakeTree(ClassDefOp, $3, MakeLeaf(IDNode, $2));*/ 
+			     $$=  MakeLeaf(IDNode, $2);	
+                          }
+                 ;
+				 
+MethodDecl		 :       
+                          { /* $$ = MakeTree(ClassDefOp, $3, MakeLeaf(IDNode, $2));*/ 
+			     $$=  MakeLeaf(IDNode, $2);	
+                          }
+                 ;
+				 
+FormalParameterList :       
+                          { /* $$ = MakeTree(ClassDefOp, $3, MakeLeaf(IDNode, $2));*/ 
+			     $$=  MakeLeaf(IDNode, $2);	
+                          }
+                 ;
+				 
+Block			 :   
+                          { /* $$ = MakeTree(ClassDefOp, $3, MakeLeaf(IDNode, $2));*/ 
+			     $$=  MakeLeaf(IDNode, $2);	
+                          }
+                 ;
+				 
+				 
+Type 			 :       
+                          { /* $$ = MakeTree(ClassDefOp, $3, MakeLeaf(IDNode, $2));*/ 
+			     $$=  MakeLeaf(IDNode, $2);	
+                          }
+                 ;
+				 
+				 
+StatementList	 :       
+                          { /* $$ = MakeTree(ClassDefOp, $3, MakeLeaf(IDNode, $2));*/ 
+			     $$=  MakeLeaf(IDNode, $2);	
+                          }
+                 ;
+				 
+Statement		 :       
+                          { /* $$ = MakeTree(ClassDefOp, $3, MakeLeaf(IDNode, $2));*/ 
+			     $$=  MakeLeaf(IDNode, $2);	
+                          }
+                 ;
+				 
+AssignmentStatement :       
+                          { /* $$ = MakeTree(ClassDefOp, $3, MakeLeaf(IDNode, $2));*/ 
+			     $$=  MakeLeaf(IDNode, $2);	
+                          }
+                 ;
+				 
+MethodCallStatement :       
+                          { /* $$ = MakeTree(ClassDefOp, $3, MakeLeaf(IDNode, $2));*/ 
+			     $$=  MakeLeaf(IDNode, $2);	
+                          }
+                 ;
+				 
+ReturnStatement	 :       
+                          { /* $$ = MakeTree(ClassDefOp, $3, MakeLeaf(IDNode, $2));*/ 
+			     $$=  MakeLeaf(IDNode, $2);	
+                          }
+                 ;
+				
+IfStatement		 :       
+                          { /* $$ = MakeTree(ClassDefOp, $3, MakeLeaf(IDNode, $2));*/ 
+			     $$=  MakeLeaf(IDNode, $2);	
+                          }
+                 ;
+				 
+				 
+WhileStatement	 :       
+                          { /* $$ = MakeTree(ClassDefOp, $3, MakeLeaf(IDNode, $2));*/ 
+			     $$=  MakeLeaf(IDNode, $2);	
+                          }
+                 ;
+				 
+Expression		 :       
+                          { /* $$ = MakeTree(ClassDefOp, $3, MakeLeaf(IDNode, $2));*/ 
+			     $$=  MakeLeaf(IDNode, $2);	
+                          }
+                 ;
+				 
+SimpleExpression :       
+                          { /* $$ = MakeTree(ClassDefOp, $3, MakeLeaf(IDNode, $2));*/ 
+			     $$=  MakeLeaf(IDNode, $2);	
+                          }
+                 ;
+				 
+Term			 :       
+                          { /* $$ = MakeTree(ClassDefOp, $3, MakeLeaf(IDNode, $2));*/ 
+			     $$=  MakeLeaf(IDNode, $2);	
+                          }
+                 ;
+				 
+Factor			 :       
+                          { /* $$ = MakeTree(ClassDefOp, $3, MakeLeaf(IDNode, $2));*/ 
+			     $$=  MakeLeaf(IDNode, $2);	
+                          }
+                 ;
+				 
+UnsignedConstant :       
+                          { /* $$ = MakeTree(ClassDefOp, $3, MakeLeaf(IDNode, $2));*/ 
+			     $$=  MakeLeaf(IDNode, $2);	
+                          }
+                 ;
+				 
+Variable		 :       
                           { /* $$ = MakeTree(ClassDefOp, $3, MakeLeaf(IDNode, $2));*/ 
 			     $$=  MakeLeaf(IDNode, $2);	
                           }
