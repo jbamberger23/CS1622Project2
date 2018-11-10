@@ -15,15 +15,15 @@
 %token <intg> ICONSTnum SCONSTnum
 
 %type <tptr> Program ClassDecl_rec ClassDecl ClassBody
-%type <tptr> Decls FieldDecl_rec FieldDecl FieldDecl_2 VariableDeclId
+%type <tptr> Decls FieldDecl_rec FieldDecl FieldDecl_2 VariableDeclId VariableDeclId_2
 %type <tptr> VariableInitializer VariableInitializer_rec
 %type <tptr> ArrayInitializer ArrayCreationExpression ArrayCreationExpression_2
 %type <tptr> MethodDecl_rec MethodDecl IDList FormalParameter FormalParameterList
-%type <tptr> Block Type Type_2 StatementList Statement Statement_2
+%type <tptr> Block Type StatementList Statement Statement_2
 %type <tptr> AssignmentStatement MethodCallStatement ReturnStatement IfStatement WhileStatement
 %type <tptr> Expression Expression_2 Term Term_2 Term_2_rec Factor
 %type <tptr> SimpleExpression SimpleExpression_1 SimpleExpression_2 SimpleExpression_2_rec
-%type <tptr> UnsignedConstant Variable Variable_2
+%type <tptr> UnsignedConstant Variable Variable_2 Variable_2_rec
 %%
 
 /* yacc specification*/
@@ -34,29 +34,45 @@ Program : PROGRAMnum IDnum SEMInum ClassDecl_rec
           }
         ;
 		
-ClassDecl_rec : ClassDecl /* 1 or More of ClassDecl */
+ClassDecl_rec : ClassDecl        /* 1 or More of ClassDecl */
                 {  $$ = MakeTree(ClassOp, NullExp(), $1); } 
               | ClassDecl_rec ClassDecl
 				{  $$ = MakeTree(ClassOp, $1, $2); }
               ;
 			  
-ClassDecl : CLASSnum IDnum ClassBody /* you need to define ClassBody and more rules*/
+ClassDecl : CLASSnum IDnum ClassBody         /* you need to define ClassBody and more rules*/
             { /* $$ = MakeTree(ClassDefOp, $3, MakeLeaf(IDNode, $2));*/ 
 				$$=  MakeLeaf(IDNode, $2);	
             }
           ;
 				 
-ClassBody : LBRACEnum Decls_rec MethodDecl_rec RBRACEnum
+ClassBody : LBRACEnum Decls MethodDecl_rec RBRACEnum
             { /* $$ = MakeTree(ClassDefOp, $3, MakeLeaf(IDNode, $2));*/ 
 				$$=  MakeLeaf(IDNode, $2);	
             }
+		  | LBRACEnum RBRACEnum
+		    {
+				
+			}
+		  | LBRACEnum Decls RBRACEnum
+		    {
+				
+			}
+		  | LBRACEnum MethodDecl_rec RBRACEnum
+		    {
+				
+			}
           ;
 				 
 Decls : DECLARATIONSnum FieldDecl_rec ENDDECLARATIONSnum 
         { /* $$ = MakeTree(ClassDefOp, $3, MakeLeaf(IDNode, $2));*/ 
 			$$=  MakeLeaf(IDNode, $2);	
         }
-        ;
+	  | DECLARATIONSnum ENDDECLARATIONSnum
+	    {
+			
+		}
+      ;
 				 
 FieldDecl_rec : FieldDecl 
                 { /* $$ = MakeTree(ClassDefOp, $3, MakeLeaf(IDNode, $2));*/ 
@@ -74,7 +90,7 @@ FieldDecl : Type FieldDecl_2
             }
           ;
 				
-FieldDecl_2 : VariableDeclId EQUALnum VariableInitializer SEMInum /* Handles multiple defs in same line*/
+FieldDecl_2 : VariableDeclId EQUALnum VariableInitializer SEMInum
 			  {
 							
 			  }
@@ -96,11 +112,21 @@ VariableDeclId : IDnum
                  { 
 					
                  }
-				| IDnum LBRACnum RBRACnum
+				| IDnum VariableDeclId_2
 				{
 					
 				}
                ;
+			   
+VariableDeclId_2 : LBRACnum RBRACnum
+				   {
+					 
+				   }
+				 | VariableDeclId_2 LBRACnum RBRACnum
+				   {
+				     
+				   }
+				 ;
 
 VariableInitializer_rec : VariableInitializer COMMAnum
 						  {
@@ -146,7 +172,7 @@ ArrayCreationExpression_2 : LBRACnum Expression RBRACnum
 							{
 								
 							}
-						  | LBRACnum Expression RBRACnum ArrayCreationExpression_2
+						  | ArrayCreationExpression_2 LBRACnum Expression RBRACnum
 						    {
 								
 							}
@@ -222,6 +248,10 @@ Block : Decls StatementList
         { /* $$ = MakeTree(ClassDefOp, $3, MakeLeaf(IDNode, $2));*/ 
 			$$=  MakeLeaf(IDNode, $2);	
         }
+	  | StatementList
+	    {
+			
+		}
       ;
 				 
 				 
@@ -233,22 +263,23 @@ Type : IDnum
 	   {
 		 
 	   }
-	 | IDnum Type_2
+	 | IDnum VariableDeclId_2
 	   {
 		 
 	   }
-	 | INTnum Type_2
+	 | INTnum VariableDeclId_2
+	   {
+		 
+	   }
+	 | IDnum VariableDeclId_2 DOTnum Type
+	   {
+		 
+	   }
+	 | INTnum VariableDeclId_2 DOTnum Type
+	   {
+	     
+	   }
      ;
-	
-Type_2 : LBRACnum RBRACnum
-		 {
-			
-		 }
-	   | Type_2 LBRACnum RBRACnum
-	     {
-			
-		 }
-	   ;
 				 
 StatementList : LBRACEnum Statement RBRACEnum
                 { /* $$ = MakeTree(ClassDefOp, $3, MakeLeaf(IDNode, $2));*/ 
@@ -285,8 +316,18 @@ Statement : AssignmentStatement
 				
 			}
           ;
+		  
+Statement_2 : Statement SEMInum
+			  {
+				
+			  }
+			| Statement_2 Statement SEMInum
+			  {
+				
+			  }
+			;
 				 
-AssignmentStatement : Variable SEMInum EQUALnum Expression
+AssignmentStatement : Variable ASSGNnum Expression
                       { /* $$ = MakeTree(ClassDefOp, $3, MakeLeaf(IDNode, $2));*/ 
 						$$=  MakeLeaf(IDNode, $2);	
                       }
@@ -359,6 +400,10 @@ Expression : SimpleExpression LTnum SimpleExpression
 			 }
 		   | SimpleExpression GTnum SimpleExpression
 			 {
+				
+			 }
+		   | SimpleExpression
+		     {
 				
 			 }
            ;
@@ -495,7 +540,7 @@ Variable : IDnum
            { /* $$ = MakeTree(ClassDefOp, $3, MakeLeaf(IDNode, $2));*/ 
 			$$=  MakeLeaf(IDNode, $2);	
            }
-		 | IDnum Variable_2
+		 | IDnum Variable_2_rec
 		   {
 		     
 		   }
@@ -514,6 +559,16 @@ Variable_2 : LBRACnum Expression RBRACnum
 				
 			 }
 		   ;
+		   
+Variable_2_rec : Variable_2
+				 {
+					
+				 }
+			   | Variable_2_rec Variable_2
+			     {
+					
+				 }
+			   ;
 %%
 
 int yycolumn, yyline;
