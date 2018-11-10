@@ -6,21 +6,27 @@
 
 %}
 
-%token <intg>  PROGRAMnum IDnum SEMInum CLASSnum  DECLARATIONSnum  ENDDECLARATIONSnum
-%token <intg>  COMMAnum EQUALnum LBRACEnum RBRACEnum LBRACnum RBRACnum LPARENnum RPARENnum VOIDnum
-%token <intg>  INTnum METHODnum VALnum DOTnum ASSGNnum RETURNnum IFnum ELSEnum WHILEnum
-%token <intg>  LTnum LEnum EQnum NEnum GEnum GTnum PLUSnum MINUSnum ORnum TIMESnum DIVIDEnum ANDnum
-%token <intg>  NOTnum ICONSTnum SCONSTnum
+%token <intg> PROGRAMnum IDnum DECLARATIONSnum ENDDECLARATIONSnum METHODnum CLASSnum VOIDnum
+%token <intg> COMMAnum EQUALnum LBRACEnum RBRACEnum LBRACnum RBRACnum LPARENnum RPARENnum SEMInum
+%token <intg> INTnum VALnum DOTnum ASSGNnum RETURNnum IFnum ELSEnum WHILEnum
+%token <intg> LTnum LEnum EQnum NEnum GEnum GTnum
+%token <intg> PLUSnum MINUSnum TIMESnum DIVIDEnum
+%token <intg> NOTnum ANDnum ORnum
+%token <intg> ICONSTnum SCONSTnum
 
-%type  <tptr>  Program ClassDecl_rec ClassDecl ClassBody Decls_rec Decls FieldDecl_rec FieldDecl VariableDeclId
-%type  <tptr>  VariableInitializer ArrayInitializer ArrayCreationExpression MethodDecl_rec MethodDecl
-%type  <tptr>  FormalParameterList Block Type StatementList Statement AssignmentStatement MethodCallStatement
-%type  <tptr>  ReturnStatement IfStatement WhileStatement Expression SimpleExpression Term Factor
-%type  <tptr>  UnsignedConstant Variable
+%type <tptr> Program ClassDecl_rec ClassDecl ClassBody
+%type <tptr> Decls FieldDecl_rec FieldDecl FieldDecl_2 VariableDeclId
+%type <tptr> VariableInitializer VariableInitializer_rec
+%type <tptr> ArrayInitializer ArrayCreationExpression ArrayCreationExpression_2
+%type <tptr> MethodDecl_rec MethodDecl IDList FormalParameter FormalParameterList
+%type <tptr> Block Type Type_2 StatementList Statement Statement_2
+%type <tptr> AssignmentStatement MethodCallStatement ReturnStatement IfStatement WhileStatement
+%type <tptr> Expression Expression_2 Term Term_2 Term_2_rec Factor
+%type <tptr> SimpleExpression SimpleExpression_1 SimpleExpression_2 SimpleExpression_2_rec
+%type <tptr> UnsignedConstant Variable Variable_2
+%%
 
-
-%%/* yacc specification*/
-<<<<<<< HEAD
+/* yacc specification*/
 Program : PROGRAMnum IDnum SEMInum ClassDecl_rec
           {  
 			$$ = MakeTree(ProgramOp, $4, MakeLeaf(IDNode, $2)); 
@@ -45,15 +51,6 @@ ClassBody : LBRACEnum Decls_rec MethodDecl_rec RBRACEnum
 				$$=  MakeLeaf(IDNode, $2);	
             }
           ;
-				 
-				 
-/*Decls_rec : Decls 
-              {  $$ = MakeTree(DeclOp, NullExp(), $1); } 
-            | Decls_rec Decls
-			  {
-				
-			  }
-			;*/
 				 
 Decls : DECLARATIONSnum FieldDecl_rec ENDDECLARATIONSnum 
         { /* $$ = MakeTree(ClassDefOp, $3, MakeLeaf(IDNode, $2));*/ 
@@ -140,10 +137,10 @@ ArrayInitializer : LBRACEnum VariableInitializer RBRACEnum
                  ;
 				 
 ArrayCreationExpression : INTnum ArrayCreationExpression_2
-                        { /* $$ = MakeTree(ClassDefOp, $3, MakeLeaf(IDNode, $2));*/ 
+                          { /* $$ = MakeTree(ClassDefOp, $3, MakeLeaf(IDNode, $2));*/ 
 							$$=  MakeLeaf(IDNode, $2);	
-                        }
-                 ;
+                          }
+                        ;
 				 
 ArrayCreationExpression_2 : LBRACnum Expression RBRACnum
 							{
@@ -192,6 +189,7 @@ IDList : IDnum COMMAnum
 			
 		 }
 	   ;
+	   
 FormalParameter : VALnum INTnum IDnum
 				  {
 					
