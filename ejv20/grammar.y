@@ -20,184 +20,252 @@
 
 
 %%/* yacc specification*/
-Program          :      PROGRAMnum IDnum SEMInum ClassDecl_rec
-                        {  
-                          $$ = MakeTree(ProgramOp, $4, MakeLeaf(IDNode, $2)); 
-                          printtree($$, 0);
+Program : PROGRAMnum IDnum SEMInum ClassDecl_rec
+          {  
+			$$ = MakeTree(ProgramOp, $4, MakeLeaf(IDNode, $2)); 
+            printtree($$, 0);
+          }
+        ;
+		
+ClassDecl_rec : ClassDecl /* 1 or More of ClassDecl */
+                {  $$ = MakeTree(ClassOp, NullExp(), $1); } 
+              | ClassDecl_rec ClassDecl
+				{  $$ = MakeTree(ClassOp, $1, $2); }
+              ;
+			  
+ClassDecl : CLASSnum IDnum ClassBody /* you need to define ClassBody and more rules*/
+            { /* $$ = MakeTree(ClassDefOp, $3, MakeLeaf(IDNode, $2));*/ 
+				$$=  MakeLeaf(IDNode, $2);	
+            }
+          ;
+				 
+ClassBody : LBRACEnum Decls_rec MethodDecl_rec RBRACEnum
+            { /* $$ = MakeTree(ClassDefOp, $3, MakeLeaf(IDNode, $2));*/ 
+				$$=  MakeLeaf(IDNode, $2);	
+            }
+          ;
+				 
+				 
+/*Decls_rec : Decls 
+              {  $$ = MakeTree(DeclOp, NullExp(), $1); } 
+            | Decls_rec Decls
+			  {  $$ = MakeTree(DeclOp, $1, $2); }
+            ;*/
+				 
+				 
+Decls : DECLARATIONSnum FieldDecl_rec ENDDECLARATIONSnum 
+        { /* $$ = MakeTree(ClassDefOp, $3, MakeLeaf(IDNode, $2));*/ 
+			$$=  MakeLeaf(IDNode, $2);	
+        }
+        ;
+				 
+FieldDecl_rec : FieldDecl 
+                { /* $$ = MakeTree(ClassDefOp, $3, MakeLeaf(IDNode, $2));*/ 
+					$$=  MakeLeaf(IDNode, $2);	
+                }
+			  | FieldDecl_rec FieldDecl
+				{
+							
+				}
+              ;
+				 
+FieldDecl : Type FieldDecl_2
+            { /* $$ = MakeTree(ClassDefOp, $3, MakeLeaf(IDNode, $2));*/ 
+				$$=  MakeLeaf(IDNode, $2);	
+            }
+          ;
+				
+FieldDecl_2 : VariableDeclId EQUALnum VariableInitializer SEMInum /* Handles multiple defs in same line*/
+			  {
+							
+			  }
+			| VariableDeclId EQUALnum VariableInitializer COMMAnum FieldDecl_2
+			  {
+							
+			  }
+			| VariableDeclId COMMAnum FieldDecl_2	
+			  {
+				
+			  }
+			| VariableDeclId SEMInum
+			  {
+				
+			  }
+			;	 
+				 
+VariableDeclId : IDnum 
+                 { 
+					
+                 }
+				| IDnum LBRACnum RBRACnum
+				{
+					
+				}
+               ;
+
+VariableInitializer_rec : VariableInitializer COMMAnum
+						  {
+						  
+						  }
+						| VariableInitializer_rec VariableInitializer COMMAnum
+						  {
+						  
+						  }
+						;
+						
+VariableInitializer : Expression
+					  {
+						
+					  }
+					| ArrayInitializer
+					  {
+						
+					  }
+					| ArrayCreationExpression
+					  {
+					  
+					  }
+					;
+				 
+ArrayInitializer : LBRACEnum VariableInitializer RBRACEnum
+                   { 
+						
+                   }
+				 | LBRACEnum VariableInitializer_rec VariableInitializer RBRACEnum
+				   {
+				   
+				   }
+                 ;
+				 
+ArrayCreationExpression : INTnum ArrayCreationExpression_2
+                        { /* $$ = MakeTree(ClassDefOp, $3, MakeLeaf(IDNode, $2));*/ 
+							$$=  MakeLeaf(IDNode, $2);	
                         }
                  ;
-ClassDecl_rec    :      ClassDecl                        /* 1 or More of ClassDecl */
-                          {  $$ = MakeTree(ClassOp, NullExp(), $1); } 
-                 |      ClassDecl_rec ClassDecl
-			  {  $$ = MakeTree(ClassOp, $1, $2); }
-                 ;
-ClassDecl        :      CLASSnum IDnum ClassBody /* you need to define ClassBody and more rules*/
-                          { /* $$ = MakeTree(ClassDefOp, $3, MakeLeaf(IDNode, $2));*/ 
-			     $$=  MakeLeaf(IDNode, $2);	
-                          }
-                 ;
 				 
-ClassBody        :      LBRACEnum Decls_rec MethodDecl_rec RBRACEnum
-                          { /* $$ = MakeTree(ClassDefOp, $3, MakeLeaf(IDNode, $2));*/ 
-			     $$=  MakeLeaf(IDNode, $2);	
-                          }
-                 ;
+ArrayCreationExpression_2 : LBRACnum Expression RBRACnum
+							{
+								
+							}
+						  | LBRACnum Expression RBRACnum ArrayCreationExpression_2
+						    {
+								
+							}
+						  ;
 				 
-				 
-Decls_rec       :      Decls 
-                          {  $$ = MakeTree(DeclOp, NullExp(), $1); } 
-                 |      Decls_rec Decls
-			  {  $$ = MakeTree(DeclOp, $1, $2); }
-                 ;
-				 
-				 
-Decls            :      DECLARATIONSnum FieldDecl_rec ENDDECLARATIONSnum 
-                          { /* $$ = MakeTree(ClassDefOp, $3, MakeLeaf(IDNode, $2));*/ 
-			     $$=  MakeLeaf(IDNode, $2);	
-                          }
-                 ;
-				 
-
-FieldDecl_rec    :      DECLARATIONSnum FieldDecl ENDDECLARATIONSnum 
-                          { /* $$ = MakeTree(ClassDefOp, $3, MakeLeaf(IDNode, $2));*/ 
-			     $$=  MakeLeaf(IDNode, $2);	
-                          }
-                 ;
-				 
-FieldDecl        :      DECLARATIONSnum FieldDecl ENDDECLARATIONSnum 
-                          { /* $$ = MakeTree(ClassDefOp, $3, MakeLeaf(IDNode, $2));*/ 
-			     $$=  MakeLeaf(IDNode, $2);	
-                          }
-                 ;
-				 
-				 
-VariableDeclId   :      LBRACEnum 
-                          { /* $$ = MakeTree(ClassDefOp, $3, MakeLeaf(IDNode, $2));*/ 
-			     $$=  MakeLeaf(IDNode, $2);	
-                          }
-                 ;	
-				 
-ArrayInitializer :      LBRACEnum 
-                          { /* $$ = MakeTree(ClassDefOp, $3, MakeLeaf(IDNode, $2));*/ 
-			     $$=  MakeLeaf(IDNode, $2);	
-                          }
-                 ;
-				 
-ArrayCreationExpression :       
-                          { /* $$ = MakeTree(ClassDefOp, $3, MakeLeaf(IDNode, $2));*/ 
-			     $$=  MakeLeaf(IDNode, $2);	
-                          }
-                 ;
-				 
-MethodDecl_rec	 :       
-                          { /* $$ = MakeTree(ClassDefOp, $3, MakeLeaf(IDNode, $2));*/ 
-			     $$=  MakeLeaf(IDNode, $2);	
-                          }
-                 ;
+MethodDecl_rec : MethodDecl
+                 { /* $$ = MakeTree(ClassDefOp, $3, MakeLeaf(IDNode, $2));*/ 
+					$$=  MakeLeaf(IDNode, $2);	
+                 }
+			   | MethodDecl_rec MethodDecl
+				 {
+					
+				 }
+               ;
 				 
 MethodDecl		 :       
-                          { /* $$ = MakeTree(ClassDefOp, $3, MakeLeaf(IDNode, $2));*/ 
-			     $$=  MakeLeaf(IDNode, $2);	
-                          }
+                        { /* $$ = MakeTree(ClassDefOp, $3, MakeLeaf(IDNode, $2));*/ 
+							$$=  MakeLeaf(IDNode, $2);	
+                        }
                  ;
 				 
 FormalParameterList :       
-                          { /* $$ = MakeTree(ClassDefOp, $3, MakeLeaf(IDNode, $2));*/ 
-			     $$=  MakeLeaf(IDNode, $2);	
-                          }
+                        { /* $$ = MakeTree(ClassDefOp, $3, MakeLeaf(IDNode, $2));*/ 
+							$$=  MakeLeaf(IDNode, $2);	
+                        }
                  ;
 				 
 Block			 :   
-                          { /* $$ = MakeTree(ClassDefOp, $3, MakeLeaf(IDNode, $2));*/ 
-			     $$=  MakeLeaf(IDNode, $2);	
-                          }
+                        { /* $$ = MakeTree(ClassDefOp, $3, MakeLeaf(IDNode, $2));*/ 
+							$$=  MakeLeaf(IDNode, $2);	
+                        }
                  ;
 				 
 				 
 Type 			 :       
-                          { /* $$ = MakeTree(ClassDefOp, $3, MakeLeaf(IDNode, $2));*/ 
-			     $$=  MakeLeaf(IDNode, $2);	
-                          }
+                        { /* $$ = MakeTree(ClassDefOp, $3, MakeLeaf(IDNode, $2));*/ 
+							$$=  MakeLeaf(IDNode, $2);	
+                        }
                  ;
 				 
 				 
 StatementList	 :       
-                          { /* $$ = MakeTree(ClassDefOp, $3, MakeLeaf(IDNode, $2));*/ 
-			     $$=  MakeLeaf(IDNode, $2);	
-                          }
+                        { /* $$ = MakeTree(ClassDefOp, $3, MakeLeaf(IDNode, $2));*/ 
+							$$=  MakeLeaf(IDNode, $2);	
+                        }
                  ;
 				 
 Statement		 :       
-                          { /* $$ = MakeTree(ClassDefOp, $3, MakeLeaf(IDNode, $2));*/ 
-			     $$=  MakeLeaf(IDNode, $2);	
-                          }
+                        { /* $$ = MakeTree(ClassDefOp, $3, MakeLeaf(IDNode, $2));*/ 
+							$$=  MakeLeaf(IDNode, $2);	
+                        }
                  ;
 				 
 AssignmentStatement :       
-                          { /* $$ = MakeTree(ClassDefOp, $3, MakeLeaf(IDNode, $2));*/ 
-			     $$=  MakeLeaf(IDNode, $2);	
-                          }
+                        { /* $$ = MakeTree(ClassDefOp, $3, MakeLeaf(IDNode, $2));*/ 
+							$$=  MakeLeaf(IDNode, $2);	
+                        }
                  ;
 				 
 MethodCallStatement :       
-                          { /* $$ = MakeTree(ClassDefOp, $3, MakeLeaf(IDNode, $2));*/ 
-			     $$=  MakeLeaf(IDNode, $2);	
-                          }
+                        { /* $$ = MakeTree(ClassDefOp, $3, MakeLeaf(IDNode, $2));*/ 
+							$$=  MakeLeaf(IDNode, $2);	
+                        }
                  ;
 				 
 ReturnStatement	 :       
-                          { /* $$ = MakeTree(ClassDefOp, $3, MakeLeaf(IDNode, $2));*/ 
-			     $$=  MakeLeaf(IDNode, $2);	
-                          }
+                        { /* $$ = MakeTree(ClassDefOp, $3, MakeLeaf(IDNode, $2));*/ 
+							$$=  MakeLeaf(IDNode, $2);	
+                        }
                  ;
 				
 IfStatement		 :       
-                          { /* $$ = MakeTree(ClassDefOp, $3, MakeLeaf(IDNode, $2));*/ 
-			     $$=  MakeLeaf(IDNode, $2);	
-                          }
+                        { /* $$ = MakeTree(ClassDefOp, $3, MakeLeaf(IDNode, $2));*/ 
+							$$=  MakeLeaf(IDNode, $2);	
+                        }
                  ;
 				 
 				 
 WhileStatement	 :       
-                          { /* $$ = MakeTree(ClassDefOp, $3, MakeLeaf(IDNode, $2));*/ 
-			     $$=  MakeLeaf(IDNode, $2);	
-                          }
+                        { /* $$ = MakeTree(ClassDefOp, $3, MakeLeaf(IDNode, $2));*/ 
+							$$=  MakeLeaf(IDNode, $2);	
+                        }
                  ;
 				 
 Expression		 :       
-                          { /* $$ = MakeTree(ClassDefOp, $3, MakeLeaf(IDNode, $2));*/ 
-			     $$=  MakeLeaf(IDNode, $2);	
-                          }
+                        { /* $$ = MakeTree(ClassDefOp, $3, MakeLeaf(IDNode, $2));*/ 
+							$$=  MakeLeaf(IDNode, $2);	
+                        }
                  ;
 				 
 SimpleExpression :       
-                          { /* $$ = MakeTree(ClassDefOp, $3, MakeLeaf(IDNode, $2));*/ 
-			     $$=  MakeLeaf(IDNode, $2);	
-                          }
+                        { /* $$ = MakeTree(ClassDefOp, $3, MakeLeaf(IDNode, $2));*/ 
+							$$=  MakeLeaf(IDNode, $2);	
+                        }
                  ;
 				 
 Term			 :       
-                          { /* $$ = MakeTree(ClassDefOp, $3, MakeLeaf(IDNode, $2));*/ 
-			     $$=  MakeLeaf(IDNode, $2);	
-                          }
+                        { /* $$ = MakeTree(ClassDefOp, $3, MakeLeaf(IDNode, $2));*/ 
+							$$=  MakeLeaf(IDNode, $2);	
+                        }
                  ;
 				 
 Factor			 :       
-                          { /* $$ = MakeTree(ClassDefOp, $3, MakeLeaf(IDNode, $2));*/ 
-			     $$=  MakeLeaf(IDNode, $2);	
-                          }
+                        { /* $$ = MakeTree(ClassDefOp, $3, MakeLeaf(IDNode, $2));*/ 
+							$$=  MakeLeaf(IDNode, $2);	
+                        }
                  ;
 				 
 UnsignedConstant :       
-                          { /* $$ = MakeTree(ClassDefOp, $3, MakeLeaf(IDNode, $2));*/ 
-			     $$=  MakeLeaf(IDNode, $2);	
-                          }
+                        { /* $$ = MakeTree(ClassDefOp, $3, MakeLeaf(IDNode, $2));*/ 
+							$$=  MakeLeaf(IDNode, $2);	
+                        }
                  ;
 				 
 Variable		 :       
-                          { /* $$ = MakeTree(ClassDefOp, $3, MakeLeaf(IDNode, $2));*/ 
-			     $$=  MakeLeaf(IDNode, $2);	
-                          }
+                        { /* $$ = MakeTree(ClassDefOp, $3, MakeLeaf(IDNode, $2));*/ 
+							$$=  MakeLeaf(IDNode, $2);	
+                        }
                  ;
 
 %%
