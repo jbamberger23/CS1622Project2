@@ -165,115 +165,357 @@ MethodDecl_rec : MethodDecl
 				 }
                ;
 				 
-MethodDecl		 :       
-                        { /* $$ = MakeTree(ClassDefOp, $3, MakeLeaf(IDNode, $2));*/ 
-							$$=  MakeLeaf(IDNode, $2);	
-                        }
-                 ;
-				 
-FormalParameterList :       
-                        { /* $$ = MakeTree(ClassDefOp, $3, MakeLeaf(IDNode, $2));*/ 
-							$$=  MakeLeaf(IDNode, $2);	
-                        }
-                 ;
-				 
-Block			 :   
-                        { /* $$ = MakeTree(ClassDefOp, $3, MakeLeaf(IDNode, $2));*/ 
-							$$=  MakeLeaf(IDNode, $2);	
-                        }
-                 ;
-				 
-				 
-Type 			 :       
-                        { /* $$ = MakeTree(ClassDefOp, $3, MakeLeaf(IDNode, $2));*/ 
-							$$=  MakeLeaf(IDNode, $2);	
-                        }
-                 ;
-				 
-				 
-StatementList	 :       
-<<<<<<< HEAD
-                        { /* $$ = MakeTree(ClassDefOp, $3, MakeLeaf(IDNode, $2));*/ 
-							$$=  MakeLeaf(IDNode, $2);	
-                        }
-                 ;
-				 
-Statement		 :       
-                        { /* $$ = MakeTree(ClassDefOp, $3, MakeLeaf(IDNode, $2));*/ 
-							$$=  MakeLeaf(IDNode, $2);	
-                        }
-                 ;
-				 
-AssignmentStatement :       
-                        { /* $$ = MakeTree(ClassDefOp, $3, MakeLeaf(IDNode, $2));*/ 
-							$$=  MakeLeaf(IDNode, $2);	
-                        }
-                 ;
-				 
-MethodCallStatement :       
-                        { /* $$ = MakeTree(ClassDefOp, $3, MakeLeaf(IDNode, $2));*/ 
-							$$=  MakeLeaf(IDNode, $2);	
-                        }
-                 ;
-				 
-ReturnStatement	 :       
-                        { /* $$ = MakeTree(ClassDefOp, $3, MakeLeaf(IDNode, $2));*/ 
-							$$=  MakeLeaf(IDNode, $2);	
-                        }
-                 ;
+MethodDecl : METHODnum Type IDnum LPARENnum RPARENnum Block
+             { /* $$ = MakeTree(ClassDefOp, $3, MakeLeaf(IDNode, $2));*/ 
+				$$=  MakeLeaf(IDNode, $2);	
+             }
+		   | METHODnum VOIDnum IDnum LPARENnum RPARENnum Block
+			 {
 				
-IfStatement		 :       
-                        { /* $$ = MakeTree(ClassDefOp, $3, MakeLeaf(IDNode, $2));*/ 
-							$$=  MakeLeaf(IDNode, $2);	
-                        }
-                 ;
-				 
-				 
-WhileStatement	 :       
-<<<<<<< HEAD
-                        { /* $$ = MakeTree(ClassDefOp, $3, MakeLeaf(IDNode, $2));*/ 
-							$$=  MakeLeaf(IDNode, $2);	
-                        }
-                 ;
-				 
-Expression		 :       
-                        { /* $$ = MakeTree(ClassDefOp, $3, MakeLeaf(IDNode, $2));*/ 
-							$$=  MakeLeaf(IDNode, $2);	
-                        }
-                 ;
-				 
-SimpleExpression :       
-                        { /* $$ = MakeTree(ClassDefOp, $3, MakeLeaf(IDNode, $2));*/ 
-							$$=  MakeLeaf(IDNode, $2);	
-                        }
-                 ;
-				 
-Term			 :       
-                        { /* $$ = MakeTree(ClassDefOp, $3, MakeLeaf(IDNode, $2));*/ 
-							$$=  MakeLeaf(IDNode, $2);	
-                        }
-                 ;
-				 
-Factor			 :       
-                        { /* $$ = MakeTree(ClassDefOp, $3, MakeLeaf(IDNode, $2));*/ 
-							$$=  MakeLeaf(IDNode, $2);	
-                        }
-                 ;
-				 
-UnsignedConstant :       
-                        { /* $$ = MakeTree(ClassDefOp, $3, MakeLeaf(IDNode, $2));*/ 
-							$$=  MakeLeaf(IDNode, $2);	
-                        }
-                 ;
-				 
-Variable		 :       
-                        { /* $$ = MakeTree(ClassDefOp, $3, MakeLeaf(IDNode, $2));*/ 
-							$$=  MakeLeaf(IDNode, $2);	
-                        }
-                 ;
-
-
+			 }
+		   | METHODnum Type IDnum LPARENnum FormalParameterList RPARENnum Block
+		     {
 				
+			 }
+		   | METHODnum VOIDnum IDnum LPARENnum FormalParameterList RPARENnum Block
+			 {
+				
+			 }
+           ;
+
+IDList : IDnum COMMAnum
+		 {
+			
+		 }
+	   | IDList IDnum COMMAnum
+	     {
+			
+		 }
+	   ;
+FormalParameter : VALnum INTnum IDnum
+				  {
+					
+				  }
+				| VALnum INTnum IDList IDnum
+				  {
+					
+				  }
+				| INTnum IDnum
+				  {
+					
+				  }
+				| INTnum IDList IDnum
+				  {
+					
+				  }
+				;
+				 
+FormalParameterList : FormalParameter
+                      {	
+						
+                      }
+					| FormalParameterList SEMInum FormalParameter
+					  {
+						
+					  }
+                    ;
+				 
+Block : Decls StatementList
+        { /* $$ = MakeTree(ClassDefOp, $3, MakeLeaf(IDNode, $2));*/ 
+			$$=  MakeLeaf(IDNode, $2);	
+        }
+      ;
+				 
+				 
+Type : IDnum 
+       { /* $$ = MakeTree(ClassDefOp, $3, MakeLeaf(IDNode, $2));*/ 
+		 $$=  MakeLeaf(IDNode, $2);	
+       }
+	 | INTnum 
+	   {
+		 
+	   }
+	 | IDnum Type_2
+	   {
+		 
+	   }
+	 | INTnum Type_2
+     ;
+	
+Type_2 : LBRACnum RBRACnum
+		 {
+			
+		 }
+	   | Type_2 LBRACnum RBRACnum
+	     {
+			
+		 }
+	   ;
+				 
+StatementList : LBRACEnum Statement RBRACEnum
+                { /* $$ = MakeTree(ClassDefOp, $3, MakeLeaf(IDNode, $2));*/ 
+					$$=  MakeLeaf(IDNode, $2);	
+                }
+			  | LBRACEnum Statement_2 Statement RBRACEnum
+				{
+					
+				}
+			  | LBRACEnum RBRACEnum
+			    {
+					
+				}
+              ;
+				 
+Statement : AssignmentStatement
+            { /* $$ = MakeTree(ClassDefOp, $3, MakeLeaf(IDNode, $2));*/ 
+				$$=  MakeLeaf(IDNode, $2);	
+            }
+	      | MethodCallStatement
+			{
+				
+			}
+		  | ReturnStatement
+		    {
+				
+			}
+		  | IfStatement
+		    {
+				
+			}
+		  | WhileStatement
+		    {
+				
+			}
+          ;
+				 
+AssignmentStatement : Variable SEMInum EQUALnum Expression
+                      { /* $$ = MakeTree(ClassDefOp, $3, MakeLeaf(IDNode, $2));*/ 
+						$$=  MakeLeaf(IDNode, $2);	
+                      }
+                    ;
+				 
+MethodCallStatement : Variable LPARENnum RPARENnum
+                      { /* $$ = MakeTree(ClassDefOp, $3, MakeLeaf(IDNode, $2));*/ 
+						$$=  MakeLeaf(IDNode, $2);	
+                      }
+					| Variable LPARENnum Expression RPARENnum
+					  {
+						
+					  }
+					| Variable LPARENnum Expression_2 Expression RPARENnum
+					  {
+						
+					  }
+                    ;
+				 
+ReturnStatement : RETURNnum
+                  { /* $$ = MakeTree(ClassDefOp, $3, MakeLeaf(IDNode, $2));*/ 
+					$$=  MakeLeaf(IDNode, $2);	
+                  }
+				| RETURNnum Expression
+				  {
+					
+				  }
+                ;
+				
+IfStatement : IFnum Expression StatementList
+              { /* $$ = MakeTree(ClassDefOp, $3, MakeLeaf(IDNode, $2));*/ 
+				$$=  MakeLeaf(IDNode, $2);	
+              }
+			| IFnum Expression StatementList ELSEnum StatementList
+			  {
+				
+			  }
+			| IFnum Expression StatementList ELSEnum IfStatement
+			  {
+				
+			  }
+            ;
+				 
+				 
+WhileStatement : WHILEnum Expression StatementList
+                 { /* $$ = MakeTree(ClassDefOp, $3, MakeLeaf(IDNode, $2));*/ 
+					$$=  MakeLeaf(IDNode, $2);	
+                 }
+               ;
+				 
+Expression : SimpleExpression LTnum SimpleExpression
+             { /* $$ = MakeTree(ClassDefOp, $3, MakeLeaf(IDNode, $2));*/ 
+				$$=  MakeLeaf(IDNode, $2);	
+             }
+		   | SimpleExpression LEnum SimpleExpression
+		     {
+				
+			 }
+		   | SimpleExpression EQnum SimpleExpression
+		     {
+				
+			 }
+		   | SimpleExpression NEnum SimpleExpression
+		     {
+				
+			 }
+		   | SimpleExpression GEnum SimpleExpression
+		     {
+				
+			 }
+		   | SimpleExpression GTnum SimpleExpression
+			 {
+				
+			 }
+           ;
+		   
+Expression_2 : Expression COMMAnum
+			   {
+				 
+			   }
+			 | Expression_2 Expression COMMAnum
+			   {
+				 
+			   }
+			 ;
+				 
+SimpleExpression : Term
+                   { /* $$ = MakeTree(ClassDefOp, $3, MakeLeaf(IDNode, $2));*/ 
+				       $$=  MakeLeaf(IDNode, $2);	
+                   }
+				 | SimpleExpression_1 Term
+				   {
+					 
+				   }
+				 | Term SimpleExpression_2_rec
+				   {
+					 
+				   }
+				 | SimpleExpression_1 Term SimpleExpression_2_rec
+				   {
+				     
+				   }
+                 ;
+				 
+SimpleExpression_1 : PLUSnum 
+					 {
+						
+					 }
+				   | MINUSnum 
+				     {
+						
+					 }
+				   ;
+				   
+SimpleExpression_2_rec : SimpleExpression_2
+						 {
+							
+						 }
+					   | SimpleExpression_2_rec SimpleExpression_2
+					     {
+							
+						 }
+					   ;
+				   
+SimpleExpression_2 : PLUSnum Term
+				     {
+						
+					 }
+				   | MINUSnum Term
+				     {
+						
+					 }
+				   | ORnum Term
+				     {
+						
+					 }
+				   ;
+				 
+Term : Factor 
+       { /* $$ = MakeTree(ClassDefOp, $3, MakeLeaf(IDNode, $2));*/ 
+			$$=  MakeLeaf(IDNode, $2);	
+       }
+	 | Factor Term_2_rec
+	   {
+		 
+	   }
+     ;
+	 
+Term_2_rec : Term_2
+			 {
+				
+			 }
+		   | Term_2_rec Term_2
+		     {
+				
+			 }
+		   ;
+		   
+Term_2 : TIMESnum Factor
+		 {
+			
+		 }
+	   | DIVIDEnum Factor
+	     {
+			
+		 }
+	   | ANDnum Factor
+	     {
+			
+		 }
+	   ;
+				 
+Factor : UnsignedConstant
+         { /* $$ = MakeTree(ClassDefOp, $3, MakeLeaf(IDNode, $2));*/ 
+			$$=  MakeLeaf(IDNode, $2);	
+         }
+	   | Variable 
+		 {
+			
+		 }
+	   | MethodCallStatement
+	     {
+			
+		 }
+	   | LPARENnum Expression RPARENnum
+	     {
+			
+		 }
+	   | NOTnum Factor 
+		 {
+			
+		 }
+       ;
+				 
+UnsignedConstant : ICONSTnum
+                   { /* $$ = MakeTree(ClassDefOp, $3, MakeLeaf(IDNode, $2));*/ 
+						$$=  MakeLeaf(IDNode, $2);	
+                   }
+				 | SCONSTnum
+				   {
+					 
+				   }
+                 ;
+				 
+Variable : IDnum 
+           { /* $$ = MakeTree(ClassDefOp, $3, MakeLeaf(IDNode, $2));*/ 
+			$$=  MakeLeaf(IDNode, $2);	
+           }
+		 | IDnum Variable_2
+		   {
+		     
+		   }
+         ;
+		 
+Variable_2 : LBRACnum Expression RBRACnum
+			 {
+				
+			 }
+		   | LBRACnum Expression_2 Expression RBRACnum
+		     {
+				
+			 }
+		   | DOTnum IDnum
+		     {
+				
+			 }
+		   ;
 %%
 
 int yycolumn, yyline;
