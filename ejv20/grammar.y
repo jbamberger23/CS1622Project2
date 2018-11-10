@@ -20,6 +20,7 @@
 
 
 %%/* yacc specification*/
+<<<<<<< HEAD
 Program : PROGRAMnum IDnum SEMInum ClassDecl_rec
           {  
 			$$ = MakeTree(ProgramOp, $4, MakeLeaf(IDNode, $2)); 
@@ -49,9 +50,10 @@ ClassBody : LBRACEnum Decls_rec MethodDecl_rec RBRACEnum
 /*Decls_rec : Decls 
               {  $$ = MakeTree(DeclOp, NullExp(), $1); } 
             | Decls_rec Decls
-			  {  $$ = MakeTree(DeclOp, $1, $2); }
-            ;*/
-				 
+			  {
+				
+			  }
+			;*/
 				 
 Decls : DECLARATIONSnum FieldDecl_rec ENDDECLARATIONSnum 
         { /* $$ = MakeTree(ClassDefOp, $3, MakeLeaf(IDNode, $2));*/ 
@@ -190,6 +192,7 @@ Type 			 :
 				 
 				 
 StatementList	 :       
+<<<<<<< HEAD
                         { /* $$ = MakeTree(ClassDefOp, $3, MakeLeaf(IDNode, $2));*/ 
 							$$=  MakeLeaf(IDNode, $2);	
                         }
@@ -227,6 +230,7 @@ IfStatement		 :
 				 
 				 
 WhileStatement	 :       
+<<<<<<< HEAD
                         { /* $$ = MakeTree(ClassDefOp, $3, MakeLeaf(IDNode, $2));*/ 
 							$$=  MakeLeaf(IDNode, $2);	
                         }
@@ -268,6 +272,8 @@ Variable		 :
                         }
                  ;
 
+
+				
 %%
 
 int yycolumn, yyline;
